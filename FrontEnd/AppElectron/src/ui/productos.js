@@ -1,11 +1,10 @@
-const { ipcRenderer} = require('electron')
-const { remote } = require('electron');
-const main = remote.require('./main');
+const{ ipcRenderer} = require('electron')
 
-const productForm = document.getElementById('productForm');
+console.log('Echo');
+const productForm1 = document.getElementById('productForm');
 
 
-productForm.addEventListener('submit',(e)=>{
+productForm1.addEventListener('submit',(e)=>{
     e.preventDefault();
     
     var nameProducto = document.getElementById('name').value;
@@ -14,12 +13,9 @@ productForm.addEventListener('submit',(e)=>{
     
     
     const newProd={nameProducto, priceProducto, descriptionProducto}
-
     console.log(nameProducto);
     console.log(priceProducto);
     console.log(descriptionProducto);
     ipcRenderer.invoke('perform-action', newProd)
-
     
 })
-
