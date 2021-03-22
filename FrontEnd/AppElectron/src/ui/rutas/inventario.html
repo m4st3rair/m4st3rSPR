@@ -1,0 +1,75 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div id="TablaProductos">
+                <table class="table table-dark table-hover table-bordered">
+                    <!-- On cells (`td` or `th`) -->
+                    <thead>
+                        <tr id="Headers">
+                            <th>Nombre</th>
+                            <th>Codigo</th>
+                            <th>Descripcion</th>
+                            <th>Estado</th>
+                            <th>Imagen</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Sabritas 60g</th>
+                            <th>123456789</th>
+                            <th>Papas Saladas</th>
+                            <th class="bg-warning">Pocos</th>
+                            <th>Sabritas 60g</th>
+                            <th><button type="button" class="btn btn-info">Editar</button></th>
+                        </tr>                <tr>
+                            <th>Sabritas 60g</th>
+                            <th>123456789</th>
+                            <th>Papas Saladas</th>
+                            <th class="bg-danger">No Disponible</th>
+                            <th>Sabritas 60g</th>
+                            <th><button type="button" class="btn btn-info">Editar</button></th>
+                        </tr>                <tr>
+                            <th>Sabritas 60g</th>
+                            <th>123456789</th>
+                            <th>Papas Saladas</th>
+                            <th class="bg-success">Disponible</th>
+                            <th>Sabritas 60g</th>
+                            <th><button type="button" class="btn btn-info">Editar</button></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <form class="card card-body" id="productForm">
+                <div class="form-group">
+                    <h3>Precio</h3>
+
+                    <input type="text" id="name" placeholder="Nombre del producto" class="form-control"
+                    autofocus>
+                </div>
+                <div class="form-group">
+                    <h3>Precio</h3>
+                    <input type="number" id="price" step="any"
+                    placeholder="Precio del producto" class="form-control"
+                    >
+                </div>
+                <div class="form-group">
+                    <h3>Descripcion</h3>
+                    <textarea id="description" rows="4"
+                    placeholder="Descripcion del producto" class="form-control"
+                    > </textarea>
+                </div>
+                <button class="btn btn-primary">
+                    save
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
