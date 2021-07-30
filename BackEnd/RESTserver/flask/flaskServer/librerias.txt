@@ -1,0 +1,6 @@
+Flask-Mail
+marshmallow-sqlalchemy
+flask-marshmallow
+flask_sqlalchemy
+flask
+pymysql
