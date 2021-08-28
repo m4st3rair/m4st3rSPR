@@ -1,13 +1,13 @@
 from flask import Flask, json, request, jsonify
-from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import exc
 from flask_marshmallow import Marshmallow
 from models import Task, Usuario, CategoriaEmpresa
-from esquemas import CategoriaEmpresaSchema
+from esquemas import CategoriaEmpresaSchema, UserSchema
+import utilerias
 
 
 app = Flask(__name__)
-mail = Mail(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/proyectoadministrador'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -26,16 +26,23 @@ ma = Marshmallow(app)
 
 
 
-#db.create_all()
-#db.drop_all()
-
 #Esto solo es un ejemplo
 class TaskSchema(ma.Schema):
     class Meta:
         fields = ('id', 'title', 'description')
+
+
 task_schema = TaskSchema()
 tasks_schema = TaskSchema( many = True )
 ##ESQUEMAS
+
+##Usuario
+usrS_schema = UserSchema(many=True)
+usr_schema = UserSchema()
+
+
+
+
 catEmpresa_schema = CategoriaEmpresaSchema()
 catEmpresas_schema = CategoriaEmpresaSchema( many = True )
 
@@ -91,59 +98,94 @@ def delete_task(id):
     db.session.commit()
     return jsonify({"Message":"Pues ya se borro"})
 
+###COSAS PARA USUARIO
+# - getUser                 
+# - getUsers                *
+# - update
+# - inicio de sesion
+# - cambio de pass
 
-#def __init__(self,nombre ,apellidos ,password ,email ,telefon ,salario, idPaymentMethod ,idUserStripe):
-@app.route('/usuario', methods=['POST'])
+# - registro de srtipe
+# - registro de paypal
+# - control de errores
+
+
+#def __init__(self, nombre, apellidos, telefono, password, email, pais, region, email_auxiliar, fecha_creacion, id_stripe):
+@app.route('/usuarios/registro', methods=['POST'])
 def nuevo_usuario():
+ 
     nombre= request.json['nombre']
     apellidos= request.json['apellidos']
+    telefono= request.json['telefono']
     password= request.json['password']
     email= request.json['email']
-    telefon= request.json['telefon']
-    salario= request.json['salario']
-    idPaymentMethod= request.json['idPaymentMethod']
-    idUserStripe= request.json['idUserStripe']
-    usuario=Usuario(nombre, apellidos, password, email, telefon, salario,  idPaymentMethod, idUserStripe)
-    db.session.add(usuario)
-    db.session.commit()
+    pais= request.json['pais']
+    region= request.json['region']
+    email_auxiliar= request.json['email_auxiliar']
+    fecha_creacion= utilerias.dateNow()
+    id_stripe= request.json['id_stripe']
 
-    # msg = Message('Hello', sender = 'yourId@gmail.com', recipients = [email])
-    # msg.body = "Bienvenido al Equipo"
-    # mail.send(msg)
+    usuario=Usuario(nombre, apellidos, telefono, password, email, pais, region, email_auxiliar, fecha_creacion, id_stripe)
 
-    return jsonify(resp("Usuario Creado con exito", False, False) )
-    
-@app.route('/usuario/informacion', methods=['PUT'])
-def update_usuario():
-    nombre= request.json['nombre']
-    apellidos= request.json['apellidos']
-    telefon= request.json['telefon']
-    salario= request.json['salario']
-    idPaymentMethod= request.json['idPaymentMethod']
-    idUserStripe= request.json['idUserStripe']
-    usuario=Usuario(nombre=nombre, apellidos=apellidos, password=password, email=email, telefon=telefon, salario=salario,  idPaymentMethod=idPaymentMethod, idUserStripe=idUserStripe)
-    db.session.add(usuario)
-    db.session.commit()
+    return jsonify( save_registro("Usuario", usuario) )
 
-@app.route('/usuario/password', methods=['PUT'])
-def update_usuario():
-    password= request.json['password']
+@app.route('/usuarios', methods=['GET'])
+def get_users():
+    users= Usuario.query.all()
+    result = usrS_schema.dump(users)
+    return jsonify(resp("OK", False, result) )
 
-    pass
+@app.route('/usuarios/<id>', methods=['GET'])
+def get_user(id):
+    usuario=Usuario.query.get(id)
+    result = usr_schema.dump(usuario)
+    return jsonify(resp("OK", False, result) )
 
 
-    return jsonify(resp("Usuario Creado con exito", False, False) )
+# @app.route('/usuario/informacion', methods=['PUT'])
+# def update_usuario():
+#     nombre= request.json['nombre']
+#     apellidos= request.json['apellidos']
+#     telefon= request.json['telefon']
+#     salario= request.json['salario']
+#     idPaymentMethod= request.json['idPaymentMethod']
+#     idUserStripe= request.json['idUserStripe']
+#     usuario=Usuario(nombre=nombre, apellidos=apellidos, password=password, email=email, telefon=telefon, salario=salario,  idPaymentMethod=idPaymentMethod, idUserStripe=idUserStripe)
+#     db.session.add(usuario)
+#     db.session.commit()
+
+# @app.route('/usuario/password', methods=['PUT'])
+# def update_usuario():
+#     password= request.json['password']
+
+#     pass
+
+
+#     return jsonify(resp("Usuario Creado con exito", False, False) )
 
 
 
 def resp(msg, error, objeto):
     return{"mensaje":msg, "error":error, "objeto":objeto}
 
-
-
-
-
-
+def save_registro(tipoRegistro, objeto ):
+    try:
+        db.session.add(objeto)
+        db.session.commit()
+        msg = "Registro de ",tipoRegistro," exitoso"
+        return resp(msg, False, False) 
+    except exc.IntegrityError:
+        print("Duplicidad")
+        msg = "Registro de " +tipoRegistro+" Duplicado, porfavor verifique sus datos"
+        return resp(msg, True, False) 
+    except exc.SQLAlchemyError:
+        print("Error en base de datos")
+        msg = "Error en base de datos"
+        return resp(msg, True, False) 
+    except:
+        print("Error en el servidor")
+        msg = "Error en el servidor"
+        return resp(msg, True, False)
 
 if __name__ == "__main__":
     app.run(debug=True)

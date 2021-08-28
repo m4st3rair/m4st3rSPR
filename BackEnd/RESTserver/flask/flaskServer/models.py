@@ -20,30 +20,34 @@ class Task(db.Model):
 
 
 class Usuario(db.Model):
-    #idPermisos = db.Column(db.Integer, )
-    #idPuesto
-    #idEstablecimiento
-    #idTipoUser=         db.Column(db.Integer, )
     id =                db.Column(db.Integer, primary_key=True)
     nombre =            db.Column(db.String(30))
     apellidos=          db.Column(db.String(50))
+    telefono=            db.Column(db.Integer)
     password=           db.Column(db.String(20))
     email=              db.Column(db.String(40), unique=True)
-    telefon=            db.Column(db.Integer)
-    salario=            db.Column(db.Float)
-    idPaymentMethod=    db.Column(db.String(50))
-    idUserStripe=       db.Column(db.String(50))
+    pais=               db.Column(db.Integer)
+    region=             db.Column(db.Integer)
+    email_auxiliar=     db.Column(db.String(20))
+    fecha_creacion=     db.Column(db.Date)
+    id_stripe=          db.Column(db.String(30), unique=True)
+
+    #LLaves foraneas
     relasionUsuario = db.relationship('ProyectoEmpresa',backref=db.backref('usuario', lazy=True),  primaryjoin="Usuario.id == ProyectoEmpresa.idUsuario" )
-    
-    def __init__(self,nombre ,apellidos ,password ,email ,telefon ,salario, idPaymentMethod ,idUserStripe):
-        self.nombre=nombre
-        self.apellidos=apellidos
-        self.password=password
-        self.email=email
-        self.telefon=telefon
-        self.salario=salario
-        self.idPaymentMethod=idPaymentMethod
-        self.idUserStripe=idUserStripe        
+
+
+    def __init__(self, nombre, apellidos, telefono, password, email, pais, region, email_auxiliar, fecha_creacion, id_stripe):
+        self.nombre= nombre
+        self.apellidos= apellidos
+        self.telefono= telefono
+        self.password= password
+        self.email= email
+        self.pais= pais
+        self.region= region
+        self.email_auxiliar= email_auxiliar
+        self.fecha_creacion= fecha_creacion
+        self.id_stripe= id_stripe
+
     
 
 
