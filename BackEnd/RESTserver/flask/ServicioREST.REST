@@ -1,0 +1,31 @@
+###Login
+
+POST http://127.0.0.1:5000/login
+Content-Type: application/json
+
+{
+    "username":"emaill@gmail.com",
+    "password": "password"
+}
+
+### seguridad JWT
+
+GET http://127.0.0.1:5000/protected
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzMDgyMjAyMCwianRpIjoiZDJlZjdmN2EtMDJkZi00MzhkLWI3NTgtMGZmZDQxMmY5OTNlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJpZCI6MSwidXNlcm5hbWUiOiJlbWFpbGxAZ21haWwuY29tIn0sIm5iZiI6MTYzMDgyMjAyMH0.VXjTe0_E-_dzA0dPrStSU8WyJ-M62CtPhhcDdtp8ypI
+
+
+### usuarios
+
+GET http://127.0.0.1:5000/usuarios
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzMDgyMjAyMCwianRpIjoiZDJlZjdmN2EtMDJkZi00MzhkLWI3NTgtMGZmZDQxMmY5OTNlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJpZCI6MSwidXNlcm5hbWUiOiJlbWFpbGxAZ21haWwuY29tIn0sIm5iZiI6MTYzMDgyMjAyMH0.VXjTe0_E-_dzA0dPrStSU8WyJ-M62CtPhhcDdtp8ypI
+
+
+###tasks
+GET    http://127.0.0.1:5000/tasks
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzMDgyMjAyMCwianRpIjoiZDJlZjdmN2EtMDJkZi00MzhkLWI3NTgtMGZmZDQxMmY5OTNlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJpZCI6MSwidXNlcm5hbWUiOiJlbWFpbGxAZ21haWwuY29tIn0sIm5iZiI6MTYzMDgyMjAyMH0.VXjTe0_E-_dzA0dPrStSU8WyJ-M62CtPhhcDdtp8ypI
+
+{
+    "title":"titulo1",
+    "description":"adasdasdasdas"
+}

@@ -1,6 +1,7 @@
 "Not Actualy"Flask-Mail
-marshmallow-sqlalchemy
+flask
 flask-marshmallow
 flask_sqlalchemy
-flask
+flask_jwt_extended
+marshmallow-sqlalchemy
 pymysql

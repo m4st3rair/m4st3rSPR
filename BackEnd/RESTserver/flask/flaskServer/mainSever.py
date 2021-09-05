@@ -7,9 +7,18 @@ from esquemas import CategoriaEmpresaSchema, UserSchema
 import utilerias
 
 
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
+
+
+
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/proyectoadministrador'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["JWT_SECRET_KEY"] = "delta-software-1998"  # Change this!
+
+
+jwt = JWTManager(app)
 
 # app.config['MAIL_SERVER']='smtp.gmail.com'
 # app.config['MAIL_PORT'] = 465
@@ -62,6 +71,7 @@ def create_categoriaEmpresa():
 
 
 @app.route('/tasks', methods=['Post'])
+@jwt_required()
 def create_task():
     title = request.json['title']
     description = request.json['description']
@@ -130,6 +140,7 @@ def nuevo_usuario():
     return jsonify( save_registro("Usuario", usuario) )
 
 @app.route('/usuarios', methods=['GET'])
+@jwt_required()
 def get_users():
     users= Usuario.query.all()
     result = usrS_schema.dump(users)
@@ -140,6 +151,30 @@ def get_user(id):
     usuario=Usuario.query.get(id)
     result = usr_schema.dump(usuario)
     return jsonify(resp("OK", False, result) )
+
+
+
+
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json['username']
+    password = request.json['password']
+    try:
+        usuario = Usuario.query.filter(Usuario.email == username, Usuario.password == password).one()
+        access_token = create_access_token(identity={"id":usuario.id, "username":username} , expires_delta=False)
+        return jsonify(access_token=access_token)
+    except:
+        return jsonify({"msg": "Usuario o Contraseña erronea"}), 401
+        
+
+@app.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
 
 
 # @app.route('/usuario/informacion', methods=['PUT'])

@@ -74,11 +74,6 @@ class ProyectoEmpresa(db.Model):
         self.usuario=usuario
 
 
-
-
-
-
-
 class CategoriaEmpresa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombreCategoria = db.Column(db.String(50), nullable=False)
@@ -89,4 +84,5 @@ class CategoriaEmpresa(db.Model):
         
 
 db.create_all()
+db.session.commit()
 #db.drop_all()
