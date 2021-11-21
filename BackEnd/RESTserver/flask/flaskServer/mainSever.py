@@ -2,9 +2,11 @@ from flask import Flask, json, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import exc
 from flask_marshmallow import Marshmallow
-from models import Task, Usuario, CategoriaEmpresa
-from esquemas import CategoriaEmpresaSchema, UserSchema
+from models import Task, Usuario, CategoriaEmpresa, Pais
+from esquemas import CategoriaEmpresaSchema, UserSchema, PaisesSchema
 import utilerias
+from flask_cors import CORS, cross_origin
+
 
 
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
@@ -19,13 +21,7 @@ app.config["JWT_SECRET_KEY"] = "delta-software-1998"  # Change this!
 
 
 jwt = JWTManager(app)
-
-# app.config['MAIL_SERVER']='smtp.gmail.com'
-# app.config['MAIL_PORT'] = 465
-# app.config['MAIL_USERNAME'] = 'antonio.islasromero@gmail.com'
-# app.config['MAIL_PASSWORD'] = 'estefanyir'
-# app.config['MAIL_USE_TLS'] = False
-# app.config['MAIL_USE_SSL'] = True
+CORS(app)
 
 
 
@@ -49,11 +45,23 @@ tasks_schema = TaskSchema( many = True )
 usrS_schema = UserSchema(many=True)
 usr_schema = UserSchema()
 
-
-
+paises_schema = PaisesSchema(many=True)
+pais_schema = PaisesSchema()
 
 catEmpresa_schema = CategoriaEmpresaSchema()
 catEmpresas_schema = CategoriaEmpresaSchema( many = True )
+
+@app.route('/paises', methods=['POST'])
+def create_paises():
+    
+    paises = request.json['paises']
+    registro_paises=[]
+    for pais in paises:
+        registro_paises.append( Pais(pais) )
+    
+
+    return save_lote("Pais", registro_paises)
+
 
 
 @app.route('/categoria-empresa', methods=['Post'])
@@ -112,33 +120,36 @@ def delete_task(id):
 # - getUser                 
 # - getUsers                *
 # - update
-# - inicio de sesion
+# - inicio de sesion        *
 # - cambio de pass
 
 # - registro de srtipe
 # - registro de paypal
-# - control de errores
+# - control de errores      *
 
 
 #def __init__(self, nombre, apellidos, telefono, password, email, pais, region, email_auxiliar, fecha_creacion, id_stripe):
 @app.route('/usuarios/registro', methods=['POST'])
 def nuevo_usuario():
- 
-    nombre= request.json['nombre']
-    apellidos= request.json['apellidos']
-    telefono= request.json['telefono']
-    password= request.json['password']
-    email= request.json['email']
-    pais= request.json['pais']
-    region= request.json['region']
-    email_auxiliar= request.json['email_auxiliar']
-    fecha_creacion= utilerias.dateNow()
-    id_stripe= request.json['id_stripe']
+    try:
+        password= request.json['password']
+        email= request.json['email']
+        nombre= request.json['nombre']
+        apellidos= request.json['apellidos']
+        telefono= request.json['telefono']
+        pais= request.json['pais']
+        region= request.json['region']
+        email_auxiliar= "request.json['email_auxiliar']"
+        fecha_creacion= utilerias.dateNow()
+        id_stripe= "request.json['id_stripe']"
+    except:
+        return jsonify({"msg": "Los datos no tienen el formato correcto o faltan datos"}), 200
+    try:
+        usuario=Usuario(nombre, apellidos, telefono, password, email, pais, region, email_auxiliar, fecha_creacion, id_stripe)
 
-    usuario=Usuario(nombre, apellidos, telefono, password, email, pais, region, email_auxiliar, fecha_creacion, id_stripe)
-
-    return jsonify( save_registro("Usuario", usuario) )
-
+        return jsonify( save_registro("Usuario", usuario) ), 200
+    except:
+        return jsonify({"msg": "Algo ha ocurrido mal"}), 400
 @app.route('/usuarios', methods=['GET'])
 @jwt_required()
 def get_users():
@@ -158,15 +169,23 @@ def get_user(id):
 
 
 @app.route('/login', methods=['POST'])
+@cross_origin()
 def login():
-    username = request.json['username']
-    password = request.json['password']
+
+    
+    try:
+        username = request.json['email']
+        password = request.json['password']
+        print("eMail: ",username, " pass: ",password)
+    except:
+        return jsonify({"msg": "Los datos no tienen el formato correcto o faltan datos"}), 200
+        
     try:
         usuario = Usuario.query.filter(Usuario.email == username, Usuario.password == password).one()
         access_token = create_access_token(identity={"id":usuario.id, "username":username} , expires_delta=False)
-        return jsonify(access_token=access_token)
+        return jsonify(access_token=access_token), 200
     except:
-        return jsonify({"msg": "Usuario o Contraseña erronea"}), 401
+        return jsonify({"msg": "Usuario o Contraseña erronea"}), 400
         
 
 @app.route("/protected", methods=["GET"])
@@ -221,6 +240,32 @@ def save_registro(tipoRegistro, objeto ):
         print("Error en el servidor")
         msg = "Error en el servidor"
         return resp(msg, True, False)
+
+
+def save_lote(tipoRegistro, objetos ):
+    try:
+        for objeto in objetos:
+            db.session.add(objeto)
+        db.session.commit()
+        msg = "Registro de ",tipoRegistro," exitoso"
+        return resp(msg, False, False) 
+    except exc.IntegrityError:
+        print("Duplicidad")
+        msg = "Registro de " +tipoRegistro+" Duplicado, porfavor verifique sus datos"
+        return resp(msg, True, False) 
+    except exc.SQLAlchemyError:
+        print("Error en base de datos")
+        msg = "Error en base de datos"
+        return resp(msg, True, False) 
+    except:
+        print("Error en el servidor")
+        msg = "Error en el servidor"
+        return resp(msg, True, False)
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

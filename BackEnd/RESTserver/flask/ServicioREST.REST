@@ -1,10 +1,10 @@
 ###Login
 
-POST http://127.0.0.1:5000/login
+POST  http://127.0.0.1:5000/login
 Content-Type: application/json
 
 {
-    "username":"emaill@gmail.com",
+    "email":"emaill@gmail.com",
     "password": "password"
 }
 

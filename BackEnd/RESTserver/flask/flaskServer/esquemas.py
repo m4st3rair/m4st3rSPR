@@ -19,6 +19,9 @@ class CategoriaEmpresaSchema(ma.Schema):
     class Meta:
         fields = ('id', 'nombreCategoria')
 
+class PaisesSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'nombrePais')
 
 #(self, 'nombre', 'apellidos', 'telefono', 'password', 'email', 'pais', 'region', 'email_auxiliar', 'fecha_creacion', 'id_stripe')
 class UserSchema(ma.Schema):

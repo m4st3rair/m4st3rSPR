@@ -1,7 +1,9 @@
 "Not Actualy"Flask-Mail
+requests
 flask
 flask-marshmallow
 flask_sqlalchemy
 flask_jwt_extended
 marshmallow-sqlalchemy
 pymysql
+flask_cors

@@ -30,7 +30,7 @@ class Usuario(db.Model):
     region=             db.Column(db.Integer)
     email_auxiliar=     db.Column(db.String(20))
     fecha_creacion=     db.Column(db.Date)
-    id_stripe=          db.Column(db.String(30), unique=True)
+    id_stripe=          db.Column(db.String(30) )
 
     #LLaves foraneas
     relasionUsuario = db.relationship('ProyectoEmpresa',backref=db.backref('usuario', lazy=True),  primaryjoin="Usuario.id == ProyectoEmpresa.idUsuario" )
@@ -81,7 +81,12 @@ class CategoriaEmpresa(db.Model):
     
     def __init__(self, nombreCategoria):
         self.nombreCategoria=nombreCategoria
-        
+
+class Pais(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    nombrePais = db.Column(db.String(50),nullable=False)
+    def __init__(self,nombrePais):
+        self.nombrePais=nombrePais
 
 db.create_all()
 db.session.commit()
