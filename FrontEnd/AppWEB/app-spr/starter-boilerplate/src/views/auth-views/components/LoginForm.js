@@ -41,8 +41,8 @@ export const LoginForm = (props) => {
 		const fakeToken = 'fakeToken'
 		JwtAuthService.login(values).then(resp => {
 			console.log(resp)
-			window.localStorage.setItem("TOKEN", resp.access_token);
-			authenticated(fakeToken)
+			window.localStorage.setItem("JsonWebToken", resp.access_token);
+			authenticated(resp.access_token)
 		}).then(e => {
 			showAuthMessage(e)
 		})

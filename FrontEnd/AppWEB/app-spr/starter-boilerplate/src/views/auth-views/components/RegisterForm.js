@@ -42,37 +42,31 @@ const rules = {
 	nombre: [
 		{ 
 			required: true,
-			message: 'por favor introduce tu contraseña'
+			message: 'por favor introduce tu nombre'
 		}
 	],
 	apellidos: [
 		{ 
 			required: true,
-			message: 'por favor introduce tu contraseña'
+			message: 'por favor introduce tu apellido'
 		}
 	],
 	telefono: [
 		{ 
 			required: true,
-			message: 'por favor introduce tu contraseña'
-		}
-	],
-	apellidos: [
-		{ 
-			required: true,
-			message: 'por favor introduce tu contraseña'
+			message: 'por favor introduce tu telefono'
 		}
 	],
 	pais: [
 		{ 
 			required: true,
-			message: 'por favor introduce tu contraseña'
+			message: 'por favor introduce tu pais'
 		}
 	],
 	region: [
 		{ 
 			required: true,
-			message: 'por favor introduce tu contraseña'
+			message: 'por favor introduce tu region/estado'
 		}
 	]
 }
@@ -89,6 +83,7 @@ export const RegisterForm = (props) => {
 			const fakeToken = 'fakeToken'
 			JwtAuthService.signUp(values).then(resp => {
 				console.log(resp)
+				window.localStorage.setItem("JsonWebToken", resp.objeto.access_token);
 				authenticated(fakeToken)
 				history.push(redirect)
 			}).then(e => {
@@ -200,7 +195,7 @@ export const RegisterForm = (props) => {
 				
 				<Form.Item>
 					<Button type="primary" htmlType="submit" block loading={loading}>
-						Sign Up
+						Registrarse
 					</Button>
 				</Form.Item>
 			</Form>

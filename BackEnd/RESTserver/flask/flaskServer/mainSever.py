@@ -146,8 +146,16 @@ def nuevo_usuario():
         return jsonify({"msg": "Los datos no tienen el formato correcto o faltan datos"}), 200
     try:
         usuario=Usuario(nombre, apellidos, telefono, password, email, pais, region, email_auxiliar, fecha_creacion, id_stripe)
+        userAnswer = save_registro("Usuario", usuario)
+        print(userAnswer)
+        if(userAnswer['error']== True):
+            return jsonify(userAnswer)
+        else:
+            print ("Whats goin on")
+            access_token = create_access_token(identity={"id":userAnswer['objeto']['id'], "username":email} , expires_delta=False)
+            print ("Whats goin 2")
+            return jsonify( resp("Todo correcto" , False, {"access_token": access_token, "id":userAnswer['objeto']['id']} ) ), 200
 
-        return jsonify( save_registro("Usuario", usuario) ), 200
     except:
         return jsonify({"msg": "Algo ha ocurrido mal"}), 400
 @app.route('/usuarios', methods=['GET'])
@@ -164,8 +172,10 @@ def get_user(id):
     return jsonify(resp("OK", False, result) )
 
 
-
-
+@app.route('/verificar', methods=["GET"])
+@jwt_required()
+def verificar():
+    return jsonify(resp("OK", False, False)), 200
 
 
 @app.route('/login', methods=['POST'])
@@ -182,6 +192,7 @@ def login():
         
     try:
         usuario = Usuario.query.filter(Usuario.email == username, Usuario.password == password).one()
+        print(usuario)
         access_token = create_access_token(identity={"id":usuario.id, "username":username} , expires_delta=False)
         return jsonify(access_token=access_token), 200
     except:
@@ -226,8 +237,9 @@ def save_registro(tipoRegistro, objeto ):
     try:
         db.session.add(objeto)
         db.session.commit()
-        msg = "Registro de ",tipoRegistro," exitoso"
-        return resp(msg, False, False) 
+        db.session.refresh(objeto)
+        msg = "Registro de "+tipoRegistro+" exitoso"
+        return resp(msg, False, {"id":objeto.id}) 
     except exc.IntegrityError:
         print("Duplicidad")
         msg = "Registro de " +tipoRegistro+" Duplicado, porfavor verifique sus datos"

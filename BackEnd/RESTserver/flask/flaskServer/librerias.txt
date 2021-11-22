@@ -1,4 +1,3 @@
-"Not Actualy"Flask-Mail
 requests
 flask
 flask-marshmallow
