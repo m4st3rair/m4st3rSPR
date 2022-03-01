@@ -10,22 +10,11 @@ import { useHistory } from "react-router-dom";
 
 
 
-const Home = ({ signOut }) => {
+export const UsuarioForm = (props) => {
 
 	
-	const initThings= "Este es un mensaje de lo mas comun";
 
-	async function verificar(){
-		try{
-			await JwtAuthService.validar();			
-		}catch(error){
-			signOut();
-		}
-	}
 
-	useEffect(()=>{
-        verificar();
-    },[]);
 	
 
 	return (
@@ -34,11 +23,12 @@ const Home = ({ signOut }) => {
 
 
 
-			<h1>
-				Dashboard
-			</h1>
+			<div>
+				El Componente es lo mejor :v {props.estatus}
+
+			</div>
 		</>
 	)
 }
 
-export default connect(null, {signOut})(Home)
+export default connect()(UsuarioForm)

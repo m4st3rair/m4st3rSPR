@@ -23,14 +23,14 @@ class Usuario(db.Model):
     id =                db.Column(db.Integer, primary_key=True)
     nombre =            db.Column(db.String(30))
     apellidos=          db.Column(db.String(50))
-    telefono=            db.Column(db.Integer)
+    telefono=           db.Column(db.Integer)
     password=           db.Column(db.String(20))
     email=              db.Column(db.String(40), unique=True)
     pais=               db.Column(db.Integer)
     region=             db.Column(db.Integer)
     email_auxiliar=     db.Column(db.String(20))
     fecha_creacion=     db.Column(db.Date)
-    id_stripe=          db.Column(db.String(30) )
+    id_stripe=          db.Column(db.String(30))
 
     #LLaves foraneas
     relasionUsuario = db.relationship('ProyectoEmpresa',backref=db.backref('usuario', lazy=True),  primaryjoin="Usuario.id == ProyectoEmpresa.idUsuario" )

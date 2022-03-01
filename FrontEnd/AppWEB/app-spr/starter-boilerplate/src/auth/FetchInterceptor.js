@@ -38,7 +38,30 @@ service.interceptors.request.use(config => {
 
 // API respone interceptor
 service.interceptors.response.use( (response) => {
+	console.log("respuesta.data", response.data);
+
+	let notificationParam = {
+		message: ''
+	}
+
+	if (response.data.code === 400 ||response.data.code === 403) {
+		notificationParam.message = 'Inicio de sesion incorrecto'
+		//notificationParam.description = 'Por favor intentalo de nuevo'
+		localStorage.removeItem(AUTH_TOKEN)
+		notification.error(notificationParam);
+
+		throw response.data.message;
+	}
+
+	if (response.data.code === 500) {
+		notificationParam.message = 'Internal Server Error'
+		notification.error(notificationParam);
+		throw "Usuario Mal Identificado";
+	}
+
 	return response.data
+
+
 }, (error) => {
 	
 	let notificationParam = {

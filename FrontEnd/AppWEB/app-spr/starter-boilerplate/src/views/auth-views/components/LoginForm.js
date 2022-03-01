@@ -5,6 +5,7 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon'
+import { AUTH_TOKEN } from 'redux/constants/Auth'
 import {  
 	showLoading, 
 	showAuthMessage, 
@@ -35,17 +36,18 @@ export const LoginForm = (props) => {
 		allowRedirect
 	} = props
 
-	const onLogin = values => {
+	async function onLogin(values) {
 		showLoading()
-		console.log(values)
-		const fakeToken = 'fakeToken'
-		JwtAuthService.login(values).then(resp => {
-			console.log(resp)
-			window.localStorage.setItem("JsonWebToken", resp.access_token);
-			authenticated(resp.access_token)
-		}).then(e => {
-			showAuthMessage(e)
-		})
+		console.log(values);
+		try{
+			var resp = await JwtAuthService.login(values);
+			console.log("Respuesta en Form:", resp);
+			window.localStorage.setItem(AUTH_TOKEN, resp.data.jwt);
+			authenticated(resp.access_token);
+
+		} catch(error){
+			showAuthMessage(error);
+		}
 	};
 
 	const onGoogleLogin = () => {
@@ -108,7 +110,7 @@ export const LoginForm = (props) => {
 				onFinish={onLogin}
 			>
 				<Form.Item 
-					name="email" 
+					name="username" 
 					label="Email" 
 					rules={[
 						{ 
