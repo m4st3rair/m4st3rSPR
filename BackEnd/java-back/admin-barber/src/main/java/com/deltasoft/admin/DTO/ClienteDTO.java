@@ -7,4 +7,5 @@ public class ClienteDTO {
     private String nombre;
     private Long telefono;
     private String idLocal;
+    private Long id;
 }
