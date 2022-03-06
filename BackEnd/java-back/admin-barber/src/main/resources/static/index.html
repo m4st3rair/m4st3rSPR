@@ -1,0 +1,66 @@
+<html>
+    <h1>
+        INICIO
+    </h1>
+
+    <table>
+        <tr>
+            <th>
+                id
+            </th>
+            <th>
+                name
+            </th>
+            <th>
+                telefono
+            </th>
+            <th>
+                fecha
+            </th>
+
+        </tr>
+
+        <tbody id="contenidoAgenda">
+
+        </tbody>
+
+    </table>
+
+
+    <script>
+        console.log("Esta vivo");
+        llenarAgenda();
+
+        async function llenarAgenda(){
+            const rawResponse = await fetch('rest/agenda', {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                }
+            });
+            const eventos = await rawResponse.json();
+
+            console.log(eventos);
+
+            var salida='';
+            for(e in eventos){
+
+                var id = ' <td>'+ eventos[e].id+'</td>';
+
+                var nombre = ' <td>'+ eventos[e].nombre+'<td>';
+
+                var telefono = ' <td>'+ eventos[e].telefono+'</td>';
+
+                var fecha = ' <td>'+ eventos[e].fechaCita+'</td>';
+
+                salida+='<tr>'+ id + nombre + telefono + fecha + '</tr>';
+            }
+          document.getElementById("contenidoAgenda").innerHTML=salida;
+
+        }
+
+
+
+    </script>
+</html>

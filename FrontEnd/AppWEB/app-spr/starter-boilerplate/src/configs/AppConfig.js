@@ -14,12 +14,12 @@ export const ESTATUS_FOMR ={
 
 
 export const THEME_CONFIG = {
-	"navType": "SIDE",
-	"sideNavTheme": "SIDE_NAV_DARK",
-	"navCollapsed": false,
-	"topNavColor": "#3e82f7",
-	"headerNavColor": "#ce0000ff",
-	"locale": "en",
-	"currentTheme": "light",
-	"direction": "ltr"
+		"navType": "SIDE",
+		"sideNavTheme": "SIDE_NAV_LIGHT",
+		"navCollapsed": false,
+		"topNavColor": "#3e82f7",
+		"headerNavColor": "#ffffffff",
+		"locale": "en",
+		"currentTheme": "light",
+		"direction": "ltr"
   };

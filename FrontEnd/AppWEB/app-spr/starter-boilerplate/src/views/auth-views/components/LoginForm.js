@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon'
 import { AUTH_TOKEN } from 'redux/constants/Auth'
+import {PERMISOS, NOMBRE_LOCAL, ID_LOCAL} from 'constants/ApiConstant'
 import {  
 	showLoading, 
 	showAuthMessage, 
@@ -41,9 +42,13 @@ export const LoginForm = (props) => {
 		console.log(values);
 		try{
 			var resp = await JwtAuthService.login(values);
-			console.log("Respuesta en Form:", resp);
+			console.log("Respuesta en Form:", resp.data);
 			window.localStorage.setItem(AUTH_TOKEN, resp.data.jwt);
-			authenticated(resp.access_token);
+			window.localStorage.setItem(PERMISOS, resp.data.permisos);
+			window.localStorage.setItem(NOMBRE_LOCAL, resp.data.nombreLocal);
+			window.localStorage.setItem(ID_LOCAL, resp.data.id_local);
+			
+			authenticated(resp.data.jwt);
 
 		} catch(error){
 			showAuthMessage(error);
