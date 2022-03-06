@@ -36,7 +36,10 @@ public class ClinenteDaoTest {
         Clientes cl = clienteDao.getCliente(2l);
         System.out.println(cl.toString());
     }
-
+    @Test
+    void eliminarClienteTest(){
+        clienteDao.eliminarCliente(5l);
+    }
 
 
 }

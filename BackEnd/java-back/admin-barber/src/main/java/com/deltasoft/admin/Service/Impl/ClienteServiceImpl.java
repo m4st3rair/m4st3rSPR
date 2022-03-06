@@ -21,6 +21,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public void registrar(ClienteDTO cliente) {
+        Clientes respuesta = new Clientes();
+
+        respuesta.setNombre(cliente.getNombre());
+        respuesta.setTelefono(cliente.getTelefono());
+        respuesta.setIdLocal(cliente.getIdLocal());
+
+         clienteDao.registrarCliente(respuesta);
 
     }
 
@@ -55,7 +62,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public void eliminarCliente(Long id) {
-
+        clienteDao.eliminarCliente(id);
     }
 
 

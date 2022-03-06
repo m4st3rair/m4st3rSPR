@@ -27,6 +27,7 @@ public class ClienteDaoImpl implements ClienteDao {
                 .setParameter(6, "")
                 .setParameter(7, cliente.getIdLocal())
                 .executeUpdate();
+
     }
 
     @Override
@@ -42,6 +43,8 @@ public class ClienteDaoImpl implements ClienteDao {
 
     @Override
     public void eliminarCliente(Long id) {
+        String hql = "Delete FROM Clientes as c Where c.id="+id;
+        entityManager.createQuery(hql).executeUpdate();
 
     }
 
@@ -59,4 +62,5 @@ public class ClienteDaoImpl implements ClienteDao {
     public void buscarCliente() {
 
     }
+
 }
