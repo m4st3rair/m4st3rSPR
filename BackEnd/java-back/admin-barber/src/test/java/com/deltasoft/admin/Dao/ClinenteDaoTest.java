@@ -33,7 +33,7 @@ public class ClinenteDaoTest {
 
     @Test
     void getClienteTest(){
-        Clientes cl = clienteDao.getCliente(1l);
+        Clientes cl = clienteDao.getCliente(2l);
         System.out.println(cl.toString());
     }
 

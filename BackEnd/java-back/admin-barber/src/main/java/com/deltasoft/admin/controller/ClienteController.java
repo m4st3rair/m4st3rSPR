@@ -41,6 +41,20 @@ public class ClienteController {
         return respuesta;
     }
 
+    @GetMapping(value = "uno")
+    private ResponseControllerDTO getUsuario(@RequestParam Long id){
+        ResponseControllerDTO respuesta = new ResponseControllerDTO();
+        try{
+            respuesta.setCode(200);
+            respuesta.setMessage("La operacion se realizo correctamente");
+            respuesta.setData(clienteService.getCliente(id));
+        }catch (Exception e){
+            respuesta.setCode(501);
+            respuesta.setMessage("Lo Sentimos, a ocurrido un error");
+        }
+
+        return respuesta;
+    }
     @PostMapping(value = "registrar")
     private void registrarU(@RequestBody ClienteDTO cliente ){
         try{

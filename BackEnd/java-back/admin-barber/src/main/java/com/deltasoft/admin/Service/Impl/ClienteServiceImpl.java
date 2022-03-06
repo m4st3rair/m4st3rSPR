@@ -34,8 +34,22 @@ public class ClienteServiceImpl implements ClienteService {
             aux.setNombre(clientes.get(i).getNombre());
             aux.setId(clientes.get(i).getId());
             aux.setTelefono(clientes.get(i).getTelefono());
+            aux.setIdLocal(localId);
             respuesta.add(aux);
         }
+        return respuesta;
+    }
+
+    @Override
+    public ClienteDTO getCliente(Long id) {
+        Clientes cliente = clienteDao.getCliente(id);
+        ClienteDTO respuesta = new ClienteDTO();
+
+        respuesta.setId(cliente.getId());
+        respuesta.setNombre(cliente.getNombre());
+        respuesta.setTelefono(cliente.getTelefono());
+        respuesta.setIdLocal(cliente.getIdLocal());
+
         return respuesta;
     }
 
@@ -44,8 +58,5 @@ public class ClienteServiceImpl implements ClienteService {
 
     }
 
-    @Override
-    public ClienteDTO getCliente(Long id) {
-        return null;
-    }
+
 }
