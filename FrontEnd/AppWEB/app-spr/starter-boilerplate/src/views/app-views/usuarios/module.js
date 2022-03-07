@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
+import JwtAuthService from 'services/JwtAuthService';
+import ClientesService from 'services/ClientesService';
 import UsuarioForm from './components/UsuarioForm';
 import {ESTATUS_FOMR} from 'configs/AppConfig';
 import { signOut } from 'redux/actions/Auth';
 import { connect } from 'react-redux';
 import { UserAddOutlined } from '@ant-design/icons';
-import { message, Button, Table, Row, Col} from "antd";
+import { message, Modal, Button, Table, Row, Col} from "antd";
 import { useHistory } from "react-router-dom";
 
 
@@ -13,76 +14,51 @@ import { useHistory } from "react-router-dom";
 
 const Usuarios = () => {
 
-	
+	const [visible, setVisible]= useState(false); 
+	const [clientes, setClientes]= useState([]);
+
+	async function cargarClientes(){
+		try{
+			const clientesAux = await ClientesService.getClientes();
+			setClientes(clientesAux.data);
+			console.log(clientesAux.data);
+		}catch(error){
+			console.log(error);
+		}
+	}
+
+	useEffect(()=>{
+        cargarClientes();
+    },[]);
 
 	const columns = [
 		{
-		  title: 'Name',
-		  dataIndex: 'name',
+		title: 'Nombre',
+		dataIndex: 'nombre',
 		},
 		{
-		  title: 'Chinese Score',
-		  dataIndex: 'chinese',
-		  sorter: {
-			compare: (a, b) => a.chinese - b.chinese,
-			multiple: 3,
-		  },
+		title: 'Telefono se fue',
+		dataIndex: 'telefono',
 		},
-		{
-		  title: 'Math Score',
-		  dataIndex: 'math',
-		  sorter: {
-			compare: (a, b) => a.math - b.math,
-			multiple: 2,
-		  },
-		},
-		{
-		  title: 'English Score',
-		  dataIndex: 'english',
-		  sorter: {
-			compare: (a, b) => a.english - b.english,
-			multiple: 1,
-		  },
-		},
-	  ];
-	  
-	  const data = [
-		{
-		  key: '1',
-		  name: 'John Brown',
-		  chinese: 98,
-		  math: 60,
-		  english: 70,
-		},
-		{
-		  key: '2',
-		  name: 'Jim Green',
-		  chinese: 98,
-		  math: 66,
-		  english: 89,
-		},
-		{
-		  key: '3',
-		  name: 'Joe Black',
-		  chinese: 98,
-		  math: 90,
-		  english: 70,
-		},
-		{
-		  key: '4',
-		  name: 'Jim Red',
-		  chinese: 88,
-		  math: 99,
-		  english: 89,
-		},
-	  ];
-
+	];
+	
 
 	function onChange(pagination, filters, sorter, extra) {
 		console.log('params', pagination, filters, sorter, extra);
 	}
 
 	console.log("Esta entrando en el modulo de usuarios");
+
+	function showModal(){
+		setVisible(true);
+	}
+	function handleCancel(){
+		setVisible(false);
+	}
+	function handleOk(){
+		setVisible(false);
+	}
+
 
 	return (
 		<React.Fragment>
@@ -91,7 +67,7 @@ const Usuarios = () => {
 			</Row>
 			<Row>
 				<Col>
-					<Button icon={<UserAddOutlined />}>
+					<Button type="primary" onClick={showModal} icon={<UserAddOutlined />}>
 						Nuevo Usuario
 					</Button>
 				</Col>
@@ -99,11 +75,18 @@ const Usuarios = () => {
 			<br/>
 			<Row>
 				<Col span={24}>
-					<Table columns={columns} dataSource={data} onChange={onChange} />
+					<Table columns={columns} dataSource={clientes} onChange={onChange} />
 				</Col>
 			</Row>
 
+			<Modal
+			title="Basic Modal"
+			visible={visible}
+			onOk={handleOk}
+			onCancel={handleCancel}
+			>
 			<UsuarioForm estatus={ESTATUS_FOMR.new}></UsuarioForm>
+			</Modal>	
 		</ React.Fragment>
 	)
 }
