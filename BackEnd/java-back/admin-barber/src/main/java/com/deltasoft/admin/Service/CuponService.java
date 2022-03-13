@@ -1,9 +1,10 @@
-package com.deltasoft.admin.Dao;
+package com.deltasoft.admin.Service;
 
 import com.deltasoft.admin.model.Cupon;
+
 import java.util.List;
 
-public interface CuponDao {
+public interface CuponService {
 
     public void insertCupon(Cupon cupon);
     public List<Cupon> getCupones();
