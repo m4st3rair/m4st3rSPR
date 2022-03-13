@@ -1,5 +1,6 @@
 package com.deltasoft.admin.Dao;
 
+import com.deltasoft.admin.DTO.CuponDTO;
 import com.deltasoft.admin.model.Cupon;
 import java.util.List;
 
