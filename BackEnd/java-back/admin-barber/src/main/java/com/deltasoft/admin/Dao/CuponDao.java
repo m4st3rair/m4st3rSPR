@@ -8,7 +8,7 @@ public interface CuponDao {
 
     public void insertCupon(Cupon cupon);
     public List<Cupon> getCupones();
-    public Cupon buscarCupon();
+    public Cupon buscarCupon(Long idCupon);
     public void eliminarCupon(Long idCupon);
 
 }

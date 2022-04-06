@@ -17,7 +17,7 @@ public class ClinenteDaoTest {
     @Test
     void registrarClienteTest(){
         Clientes cliente = new Clientes();
-        cliente.setNombre("Pedro El momo");
+        cliente.setNombre("Tania Rojano");
         cliente.setTelefono(7876545473l);
         cliente.setIdLocal("ADMCASA");
         clienteDao.registrarCliente(cliente);

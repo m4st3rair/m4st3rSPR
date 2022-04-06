@@ -2,7 +2,6 @@ package com.deltasoft.admin.model;
 
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data
@@ -20,4 +19,6 @@ public class Cupon {
     @Column(name="descuento")
     private Integer descuento;
 
+    @Column(name = "tipo_de_descuento")
+    private String tipo_de_descuento;
 }

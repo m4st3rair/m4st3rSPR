@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,27 +20,30 @@ public class CuponServiceImpl implements CuponService {
 
 
     @Override
-    public void insertCupon(Cupon cupon) {
+    public void insertCupon(CuponDTO resp) {
         Cupon cup = new Cupon();
-        cup.setId(cupon.getId());
-        cup.setCodigo(cupon.getCodigo());
-        cup.setDescuento(cupon.getDescuento());
+        cup.setId(resp.getId());
+        cup.setCodigo(resp.getCodigo());
+        cup.setDescuento(resp.getDescuento());
+        cup.setTipo_de_descuento(resp.getTipo_de_descuento());
 
         cuponDao.insertCupon(cup);
     }
 
     @Override
-    public List<Cupon> getCupones() {
+    public List<CuponDTO> getCupones() {
         return null;
     }
 
     @Override
-    public Cupon buscarCupon() {
-        return null;
+    public Cupon buscarCupon(Long idCupon) {
+        Cupon cup = cuponDao.buscarCupon(idCupon);
+        return cup;
     }
 
     @Override
     public void eliminarCupon(Long idCupon) {
 
     }
+
 }
