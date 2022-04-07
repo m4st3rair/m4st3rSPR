@@ -25,14 +25,25 @@ public class CuponServiceImpl implements CuponService {
         cup.setId(resp.getId());
         cup.setCodigo(resp.getCodigo());
         cup.setDescuento(resp.getDescuento());
-        cup.setTipo_de_descuento(resp.getTipo_de_descuento());
+        cup.setTipoDeDescuento(resp.getTipoDeDescuento());
 
         cuponDao.insertCupon(cup);
     }
 
     @Override
     public List<CuponDTO> getCupones() {
-        return null;
+        List<Cupon>cup = cuponDao.getCupones();
+        List<CuponDTO> resp = new ArrayList<CuponDTO>();
+
+        for (int i=0; i< cup.size(); i++){
+            CuponDTO aux = new CuponDTO();
+            aux.setId(cup.get(i).getId());
+            aux.setCodigo(cup.get(i).getCodigo());
+            aux.setDescuento(cup.get(i).getDescuento());
+            aux.setTipoDeDescuento(cup.get(i).getTipoDeDescuento());
+            resp.add(aux);
+        }
+        return resp;
     }
 
     @Override

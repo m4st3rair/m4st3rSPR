@@ -20,5 +20,5 @@ public class Cupon {
     private Integer descuento;
 
     @Column(name = "tipo_de_descuento")
-    private String tipo_de_descuento;
+    private String tipoDeDescuento;
 }

@@ -16,20 +16,27 @@ public class CuponDaoTest {
     @Test
     void InsertCuponTest(){
         Cupon cupon = new Cupon();
-        cupon.setCodigo("TaniaR");
+        cupon.setCodigo("TaniaRojano");
         cupon.setDescuento(1);
-        cupon.setTipo_de_descuento("MONETARIO");
+        cupon.setTipoDeDescuento("MONETARIO");
         cuponDao.insertCupon(cupon);
 
     }
 
     @Test
     void BuscarCuponTest(){
-        Cupon cupon = cuponDao.buscarCupon(5L);
+        Cupon cupon = cuponDao.buscarCupon(6L);
         System.out.println(cupon.toString());
         /*System.out.println(cupon.getCodigo());
         System.out.println(cupon.getDescuento());
         System.out.println(cupon.getTipo_de_descuento());*/
+    }
+    @Test
+    void GetCuponesTest(){
+        List<Cupon> cupon = cuponDao.getCupones();
+        for (Cupon cl: cupon){
+            System.out.println(cl.toString());
+        }
     }
 
     @Test

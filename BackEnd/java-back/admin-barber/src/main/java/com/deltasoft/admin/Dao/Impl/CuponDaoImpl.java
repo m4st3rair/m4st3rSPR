@@ -24,7 +24,7 @@ public class CuponDaoImpl implements CuponDao {
         entityManager.createNativeQuery("INSERT INTO cupones (codigo, descuento, tipo_de_descuento) VALUES (?,?,?)")
                 .setParameter(1, cupon.getCodigo())
                 .setParameter(2, cupon.getDescuento())
-                .setParameter(3,cupon.getTipo_de_descuento())
+                .setParameter(3,cupon.getTipoDeDescuento())
                 .executeUpdate();
     }
 
